@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ONLINE SAVING: paste your Google Apps Script web app URL between the quotes below -->
+<script>window.HBN_CONFIG = { API_URL: 'PASTE_YOUR_APPS_SCRIPT_URL_HERE' };</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HBN Au Pair · South America</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF6FD; --surface:#FFFFFF; --surface-2:#F5ECFA; --ink:#3A1542; --text:#4B3257; --muted:#8C7599;
+  --line:#EBDDF3; --plum:#6B2E83; --orchid:#A855C8; --lilac:#D7BDEE; --lilac-2:#EEE2F8; --blush:#F4C6DD; --blush-2:#FCE9F2; --rose:#B4417E;
+  --shadow:0 1px 0 rgba(107,46,131,.06), 0 8px 24px -16px rgba(107,46,131,.35);
+  --serif:'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans:'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  color-scheme: light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1B0F21; --surface:#241529; --surface-2:#2E1B35; --ink:#F6E9FA; --text:#E3D0EB; --muted:#A993B5;
+    --line:#3B2644; --plum:#D39BEA; --orchid:#C27BE0; --lilac:#6E3F86; --lilac-2:#3A2346; --blush:#8C3F68; --blush-2:#3E1F31; --rose:#F29AC6;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 10px 30px -18px rgba(0,0,0,.8); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1B0F21; --surface:#241529; --surface-2:#2E1B35; --ink:#F6E9FA; --text:#E3D0EB; --muted:#A993B5;
+  --line:#3B2644; --plum:#D39BEA; --orchid:#C27BE0; --lilac:#6E3F86; --lilac-2:#3A2346; --blush:#8C3F68; --blush-2:#3E1F31; --rose:#F29AC6;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 10px 30px -18px rgba(0,0,0,.8); color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--orchid);outline-offset:2px;border-radius:8px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 64px}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:14px}
+.brand svg{flex:none}
+.brand h1{font-family:var(--serif);font-weight:600;font-size:clamp(26px,4vw,36px);line-height:1.05;margin:0;color:var(--ink);letter-spacing:-.01em}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:14px}
+nav.tabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:24px;flex-wrap:wrap}
+nav.tabs button{border:0;background:transparent;padding:8px 16px;border-radius:999px;cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+nav.tabs button[aria-selected="true"]{background:var(--surface);color:var(--plum);box-shadow:var(--shadow)}
+section.view{display:none;padding-top:30px}
+section.view.on{display:block}
+
+/* overview */
+.hero{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3.4vw,40px);line-height:1.22;color:var(--ink);max-width:22ch;margin:6px 0 30px;letter-spacing:-.01em}
+.hero{max-width:30ch}
+.hero .n{font-style:italic;font-weight:600;color:var(--plum)}
+.grid{display:grid;gap:18px}
+.g-3{grid-template-columns:1.1fr 1.1fr 1.4fr}
+.g-2{grid-template-columns:1.5fr 1fr}
+.g-2b{grid-template-columns:1fr 1fr}
+@media (max-width:900px){.g-3,.g-2,.g-2b{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px 22px 20px;box-shadow:var(--shadow);min-width:0}
+.panel h2{font-family:var(--serif);font-weight:600;font-size:19px;color:var(--ink);margin:0 0 4px}
+.panel .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+.ringrow{display:flex;align-items:center;gap:20px}
+.ringrow .legend{display:grid;gap:10px;font-size:14px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:1px}
+.legend b{font-family:var(--serif);font-size:20px;color:var(--ink);font-weight:600;margin-right:4px}
+.ring-center{font-family:var(--serif)}
+.bars{display:grid;gap:14px}
+.barline .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+.barline .lbl span:last-child{color:var(--muted)}
+.track{height:10px;background:var(--lilac-2);border-radius:999px;overflow:hidden;display:flex}
+.track i{display:block;height:100%}
+.section-title{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--ink);margin:44px 0 6px}
+.section-lead{color:var(--muted);margin:0 0 20px;max-width:70ch}
+.stack{height:18px;border-radius:999px;overflow:hidden;display:flex;background:var(--lilac-2);margin:14px 0 14px}
+.stack i{display:block;height:100%}
+.keys{display:flex;gap:22px;flex-wrap:wrap;font-size:14px}
+.keys b{font-family:var(--serif);font-size:24px;color:var(--ink);display:block;font-weight:600;line-height:1.1}
+.bignum{font-family:var(--serif);font-size:54px;line-height:1;color:var(--plum);font-weight:600;font-style:italic}
+.todo{list-style:none;margin:0;padding:0}
+.todo li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.todo li:last-child{border-bottom:0}
+.count{min-width:30px;text-align:center;font-weight:700;border-radius:999px;padding:2px 10px;font-size:13px}
+.count.hot{background:var(--blush-2);color:var(--rose)}
+.count.zero{background:var(--surface-2);color:var(--muted)}
+.chart{width:100%;height:auto;display:block}
+.chart text{font-family:var(--sans);fill:var(--muted);font-size:11px}
+.yrs{width:100%;border-collapse:collapse;font-size:14px}
+.yrs th{font-weight:600;color:var(--muted);text-align:right;padding:6px 0;font-size:12.5px}
+.yrs th:first-child,.yrs td:first-child{text-align:left}
+.yrs td{text-align:right;padding:9px 0;border-top:1px solid var(--line)}
+.yrs td:first-child{font-family:var(--serif);font-size:17px;color:var(--ink)}
+
+/* tables */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.search{flex:1 1 220px;min-width:180px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 16px;font:inherit;color:var(--text)}
+.search::placeholder{color:var(--muted)}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--plum);box-shadow:var(--shadow)}
+.tablebox{overflow:auto;max-height:max(620px,calc(100vh - 140px));overscroll-behavior:contain;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+table.data{width:100%;border-collapse:collapse;font-size:14px;min-width:880px}
+table.data th{text-align:left;font-weight:600;color:var(--muted);font-size:12.5px;padding:14px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface);position:sticky;top:0}
+table.data td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+table.data tr:last-child td{border-bottom:0}
+table.data tr.row:hover td{background:color-mix(in srgb, var(--lilac-2) 55%, transparent)}
+.nm{font-weight:600;color:var(--ink);background:none;border:0;padding:4px 6px;margin:-4px -6px;border-radius:10px;cursor:pointer;text-align:left;display:block}
+.nm .nm-t{color:var(--plum);text-decoration:underline;text-decoration-color:var(--lilac);text-decoration-thickness:2px;text-underline-offset:3px}
+.nm:hover{background:var(--lilac-2)}
+.nm:hover .nm-t{text-decoration-color:var(--plum)}
+.nm .more{display:inline-flex;align-items:center;gap:4px;margin-top:4px;font-size:11.5px;font-weight:700;color:var(--orchid);background:var(--lilac-2);padding:2px 8px;border-radius:999px}
+.nm:hover .more{background:var(--plum);color:var(--surface)}
+.hint{display:flex;align-items:center;gap:8px;color:var(--plum);font-size:13.5px;margin:0 0 12px;background:var(--lilac-2);padding:9px 14px;border-radius:14px}
+.agentbar{display:grid;grid-template-columns:1.2fr repeat(3,1fr);gap:18px;align-items:end;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px 22px;margin-bottom:14px;box-shadow:var(--shadow)}
+@media (max-width:760px){.agentbar{grid-template-columns:1fr 1fr}}
+.ab-title b{display:block;font-family:var(--serif);font-size:19px;color:var(--ink)}
+.ab-title span{color:var(--muted);font-size:13px}
+.ab-item span{display:block;font-size:13px;color:var(--muted)}
+.ab-item b{font-family:var(--serif);font-size:24px;color:var(--ink);font-weight:600;display:block;margin:2px 0 6px}
+.checks{display:flex;gap:6px;align-items:center}
+.ck{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 10px 4px 5px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.ck .box{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--lilac);display:inline-flex;align-items:center;justify-content:center;color:var(--surface)}
+.ck.on{background:var(--lilac-2);color:var(--plum);border-color:var(--lilac)}
+.ck.on .box{background:var(--plum);border-color:var(--plum)}
+.ck:hover{border-color:var(--orchid)}
+.ck em{font-style:normal;font-weight:400;color:var(--muted);margin-left:4px}
+.prog{font-size:12px;font-weight:700;color:var(--muted);margin-left:4px}
+.prog.full{color:var(--plum)}
+.dcheck{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px dashed var(--lilac)}
+.dcheck b{font-family:var(--serif);color:var(--ink);margin-right:6px}
+.who{display:flex;align-items:center;gap:12px}
+.av{flex:none;width:44px;height:44px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px var(--surface),0 0 0 4px var(--lilac);background:var(--lilac-2)}
+.av.ini{display:inline-flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;font-size:16px;color:var(--plum);background:linear-gradient(135deg,var(--lilac-2),var(--blush-2))}
+.detail .inner{display:flex;gap:22px;align-items:flex-start;position:sticky;left:14px;width:min(1100px,calc(100vw - 110px))}
+.detail .big{flex:none;width:120px;height:120px;border-radius:22px;object-fit:cover;box-shadow:var(--shadow)}
+.detail .big.ini{display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:38px;color:var(--plum);background:linear-gradient(135deg,var(--lilac-2),var(--blush-2))}
+@media (max-width:640px){.detail .inner{flex-direction:column}}
+.faces{display:flex;flex-wrap:wrap;gap:0;margin-top:14px}
+.faces img,.faces span{margin-left:-10px;width:40px;height:40px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px var(--surface)}
+.faces :first-child{margin-left:0}
+.nm small{display:block;font-weight:400;color:var(--muted);font-size:12.5px;text-decoration:none}
+.chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.c-good{background:var(--lilac-2);color:var(--plum)}
+.c-mid{background:var(--surface-2);color:var(--muted)}
+.c-bad{background:var(--blush-2);color:var(--rose)}
+.c-strong{background:var(--plum);color:var(--surface)}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;background:var(--surface)}
+.toggle button{border:0;background:transparent;padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--muted);white-space:nowrap}
+.toggle button.on.yes{background:var(--plum);color:var(--surface)}
+.toggle button.on.no{background:var(--blush);color:var(--ink)}
+.stars{color:var(--orchid);letter-spacing:1px}
+table.data tr.detail td{background:var(--surface-2);white-space:normal}
+.dl{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px 22px;padding:6px 0}
+.dl div span{display:block;color:var(--muted);font-size:12px}
+.dl div b{display:block;font-weight:500;color:var(--ink);overflow-wrap:anywhere}
+.note{color:var(--rose);font-size:13px;margin-top:10px}
+.savebar{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;margin-left:auto}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+.docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.docs .panel h2{font-size:18px}
+.check{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px;font-size:14px}
+.check li{display:flex;justify-content:space-between;gap:10px}
+nav.tabs .lk{margin-right:6px;vertical-align:-1px;opacity:.7}
+.lockbox{display:flex;justify-content:center;padding:40px 0}
+.lockcard{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:34px;max-width:420px;width:100%;text-align:center;box-shadow:var(--shadow)}
+.lockcard h2{font-family:var(--serif);color:var(--ink);font-size:24px;margin:12px 0 6px}
+.lockcard form{display:grid;gap:10px;margin-top:10px}
+.unlock{border:0;background:var(--plum);color:var(--surface);font-weight:700;padding:12px;border-radius:999px;cursor:pointer}
+.err{color:var(--rose);min-height:1.2em;margin:10px 0 0;font-size:14px}
+.lockbtn{border:1px solid var(--line);background:var(--surface);color:var(--plum);font-weight:600;font-size:13px;padding:7px 14px;border-radius:999px;cursor:pointer}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px}
+.rcard{background:var(--surface);border:1px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.rphoto{flex:none;width:96px;height:96px;border-radius:20px;object-fit:cover;object-position:center 30%;display:block;box-shadow:0 0 0 3px var(--surface),0 0 0 4px var(--lilac)}
+.rphoto.ini{display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:30px;color:var(--plum);background:linear-gradient(135deg,var(--lilac-2),var(--blush-2))}
+.rbody{padding:20px 22px 22px}
+.rhead{display:flex;gap:16px;align-items:center;margin-bottom:14px}
+.rhead .rmeta{margin-bottom:0}
+.rbody h2{font-family:var(--serif);font-weight:600;font-size:23px;color:var(--ink);margin:0;line-height:1.15}
+.rmeta{color:var(--muted);margin:4px 0 12px;font-size:14px}
+.rtags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.rr{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-top:1px dashed var(--line);font-size:14px}
+.rr span{color:var(--muted);flex:none}
+.rr b{font-weight:500;color:var(--ink);text-align:right}
+.pend{color:var(--rose);font-style:italic;font-weight:400;font-size:.92em}
+.pend.sm{font-size:12px}
+.stars .off{color:var(--lilac)}
+b .stars, .dl div b .stars{color:var(--orchid);display:inline-block;font-size:13px;white-space:nowrap;margin-left:4px;letter-spacing:1px;overflow-wrap:normal}
+.rr b .stars{color:var(--orchid);letter-spacing:1px;margin-left:4px}
+.rfilters{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:16px 20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.rf{display:grid;gap:4px;font-size:12.5px;color:var(--muted);font-weight:600}
+.rf select{font:inherit;font-size:14px;font-weight:500;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:8px 32px 8px 14px;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--plum) 50%),linear-gradient(135deg,var(--plum) 50%,transparent 50%);background-position:calc(100% - 17px) 55%,calc(100% - 12px) 55%;background-size:5px 5px;background-repeat:no-repeat;cursor:pointer;min-width:150px}
+.rclear{margin-left:auto;border:0;background:var(--plum);color:var(--surface);font-weight:700;padding:9px 16px;border-radius:999px;cursor:pointer}
+.rclear:disabled{background:var(--surface-2);color:var(--muted);cursor:default}
+.dl div b span{display:inline;font-size:inherit}
+.dl div b .stars .off{display:inline;color:var(--lilac)}
+.dl div b .pend{color:var(--rose)}
+.clist{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.ccard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px 18px 16px;box-shadow:var(--shadow)}
+.ccard.full{border-color:var(--lilac);background:linear-gradient(180deg,var(--lilac-2),var(--surface) 60%)}
+.ccard header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.cname{flex:1;min-width:0}
+.cname b{display:block;font-family:var(--serif);font-size:17px;color:var(--ink);line-height:1.2}
+.cname .chip{margin-top:4px}
+.cprog{font-family:var(--serif);font-weight:600;font-size:20px;color:var(--plum)}
+.ccard ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.citem{width:100%;display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:10px 12px;cursor:pointer;text-align:left}
+.citem:hover{border-color:var(--orchid)}
+.cbox{flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--lilac);display:inline-flex;align-items:center;justify-content:center;color:var(--surface)}
+.citem.on{background:var(--lilac-2);border-color:var(--lilac)}
+.citem.on .cbox{background:var(--plum);border-color:var(--plum)}
+.clabel{flex:1;font-weight:600;color:var(--ink);font-size:14px}
+.citem.on .clabel{color:var(--plum)}
+.cdate{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.cnote{width:100%;margin-top:10px;border:1px dashed var(--lilac);background:var(--surface-2);border-radius:12px;padding:9px 12px;font:inherit;font-size:13.5px;color:var(--text);resize:vertical}
+.ab-item b small{font-family:var(--sans);font-size:13px;color:var(--muted);font-weight:500}
+.ehead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.ehead b{font-family:var(--serif);font-size:18px;color:var(--ink)}
+.ehead > span{color:var(--muted);font-size:13px}
+.ebtn{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--plum);color:var(--surface);font-weight:700;font-size:13px;padding:8px 14px;border-radius:999px;cursor:pointer}
+.egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px 16px}
+.esec{grid-column:1/-1;font-family:var(--serif);font-size:15px;color:var(--plum);margin:10px 0 0;padding-top:10px;border-top:1px dashed var(--lilac)}
+.esec:first-child{border-top:0;padding-top:0;margin-top:0}
+.ef{display:grid;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
+.ef.wide{grid-column:1/-1}
+.ef input,.ef select,.ef textarea{font:inherit;font-size:14px;font-weight:400;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%}
+.ef input:focus,.ef select:focus,.ef textarea:focus{outline:2px solid var(--orchid);outline-offset:0;border-color:transparent}
+.eactions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center}
+.esave{border:0;background:var(--plum);color:var(--surface);font-weight:700;padding:10px 18px;border-radius:999px;cursor:pointer}
+.ecancel{border:1px solid var(--line);background:var(--surface);color:var(--plum);font-weight:600;padding:9px 16px;border-radius:999px;cursor:pointer}
+.ereset{margin-left:auto;border:0;background:none;color:var(--rose);font-weight:600;font-size:13px;cursor:pointer;text-decoration:underline}
+.clist,.rgrid{max-height:max(640px,calc(100vh - 150px));overflow-y:auto;overscroll-behavior:contain;padding:4px 6px 10px 2px;margin:0 -6px 0 -2px}
+.tablebox::-webkit-scrollbar,.clist::-webkit-scrollbar,.rgrid::-webkit-scrollbar{width:10px;height:10px}
+.tablebox::-webkit-scrollbar-thumb,.clist::-webkit-scrollbar-thumb,.rgrid::-webkit-scrollbar-thumb{background:var(--lilac);border-radius:999px;border:2px solid var(--surface)}
+.tablebox::-webkit-scrollbar-track,.clist::-webkit-scrollbar-track,.rgrid::-webkit-scrollbar-track{background:transparent}
+.tablebox,.clist,.rgrid{scrollbar-color:var(--lilac) transparent;scrollbar-width:thin}
+table.data th{z-index:2}
+.subnav{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.seg.big button{padding:9px 18px;font-size:14px}
+.subnav .savebar{margin-left:auto}
+.paysum{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+@media (max-width:900px){.paysum{grid-template-columns:repeat(2,1fr)}}
+.ps{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow)}
+.ps span{display:block;font-size:12.5px;color:var(--muted);font-weight:600}
+.ps b{display:block;font-family:var(--serif);font-size:30px;color:var(--ink);line-height:1.1;margin-top:4px}
+.ps small{color:var(--muted);font-size:12px}
+.ps.hot b{color:var(--rose)}
+.paygrid{display:grid;grid-template-columns:1fr;gap:18px}
+@media (max-width:1000px){.paygrid{grid-template-columns:1fr}}
+.paypanel{padding:18px}
+.ptitle{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
+.ptitle .sub{margin:2px 0 0}
+.search.sm{flex:0 1 180px;min-width:140px;padding:8px 14px}
+.tablebox.short{max-height:max(460px,calc(100vh - 360px));box-shadow:none}
+table.data.mini{min-width:0}
+table.data.mini td,table.data.mini th{padding:9px 10px}
+table.data.mini .av{width:34px;height:34px}
+.pname{font-weight:600;color:var(--ink)}
+.yr{display:block;color:var(--muted);font-size:12px}
+.paybtn{border:1px solid var(--lilac);background:var(--lilac-2);color:var(--plum);font-weight:700;font-size:12.5px;padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.paybtn:hover{background:var(--plum);color:var(--surface)}
+.psel{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);border-radius:999px;padding:5px 10px;background:var(--surface);color:var(--text);cursor:pointer;max-width:190px}
+.psel.pend-s{background:var(--blush-2);color:var(--rose);border-color:var(--blush)}
+.psel.ok-s{background:var(--lilac-2);color:var(--plum);border-color:var(--lilac)}
+.loaderr{background:var(--blush-2);color:var(--rose);padding:14px 18px;border-radius:14px;font-weight:600}
+footer #export{margin-right:12px}
+.editor{display:inline-block;margin-right:14px;color:var(--plum);font-weight:600}
+.linkbtn{border:0;background:none;color:var(--plum);text-decoration:underline;font-weight:700;cursor:pointer;padding:0}
+footer{margin-top:50px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+@media (prefers-reduced-motion:no-preference){ .grow{transition:width .6s ease} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+        <g transform="translate(23 23)">
+          <ellipse rx="7" ry="14" fill="var(--lilac)" transform="rotate(0) translate(0 -8)"/>
+          <ellipse rx="7" ry="14" fill="var(--blush)" transform="rotate(72) translate(0 -8)"/>
+          <ellipse rx="7" ry="14" fill="var(--lilac)" transform="rotate(144) translate(0 -8)"/>
+          <ellipse rx="7" ry="14" fill="var(--blush)" transform="rotate(216) translate(0 -8)"/>
+          <ellipse rx="7" ry="14" fill="var(--lilac)" transform="rotate(288) translate(0 -8)"/>
+          <circle r="5.5" fill="var(--plum)"/>
+        </g>
+      </svg>
+      <div>
+        <h1>HBN Au Pair, South America</h1>
+        <p id="today"></p>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" aria-selected="true" data-view="ready">Ready to introduce</button>
+      <button role="tab" aria-selected="false" data-view="active">Active candidates</button>
+      <button role="tab" aria-selected="false" data-view="matches">Matches</button>
+      <button role="tab" aria-selected="false" data-view="docs">Visa documents</button>
+      <button role="tab" aria-selected="false" data-view="overview">Overview</button>
+      <button role="tab" aria-selected="false" data-view="check"><svg class="lk" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5.2" width="8" height="5.8" rx="1.4" fill="currentColor"/><path d="M3.9 5.2V3.8a2.1 2.1 0 0 1 4.2 0v1.4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>Laís Control</button>
+    </nav>
+  </header>
+
+  <section class="view" id="v-overview"></section>
+  <section class="view on" id="v-ready">
+    <div class="rfilters" id="rfilters" aria-label="Filter candidates"></div>
+    <p class="section-lead" id="ready-lead"></p>
+    <div class="rgrid" id="ready-grid"></div>
+  </section>
+  <section class="view" id="v-active">
+    <div class="toolbar">
+      <input class="search" id="q" type="search" placeholder="Search by name, city or country" aria-label="Search candidates">
+      <div class="seg" id="f-group" aria-label="Filter by group"></div>
+      <div class="seg" id="f-intro" aria-label="Filter by introduce status"></div>
+      <div class="seg" id="f-fee" aria-label="Filter by registration fee"></div>
+      <span class="savebar" id="save" aria-live="polite"></span>
+    </div>
+    <p class="hint"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v4M8 4.6v.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Click a candidate's name or "View more information" to see her contact, experience, family preferences and notes.</p>
+    <div class="tablebox"><table class="data" id="t-active"></table></div>
+  </section>
+  <section class="view" id="v-check">
+    <div id="lock" class="lockbox" hidden></div>
+    <div id="check-body" hidden>
+      <div class="subnav">
+        <div class="seg big" id="lc-nav" role="tablist" aria-label="Laís Control sections">
+          <button type="button" data-lc="checklist" aria-pressed="true">Candidate checklist</button>
+          <button type="button" data-lc="payments" aria-pressed="false">Payments</button>
+        </div>
+        <span class="savebar" id="save3" aria-live="polite"></span>
+        <button type="button" class="lockbtn" id="relock">Lock tab</button>
+      </div>
+      <div id="lc-checklist">
+      <div class="toolbar">
+        <input class="search" id="q3" type="search" placeholder="Search a candidate" aria-label="Search Laís Control">
+        <div class="seg" id="f-check" aria-label="Filter by checklist progress"></div>
+        <div class="seg" id="f-cready" aria-label="Filter by introduce status"></div>
+        <span class="savebar" id="save2" aria-live="polite"></span>
+      </div>
+      <div class="agentbar" id="agentbar"></div>
+      <div class="clist" id="clist"></div>
+      </div>
+      <div id="lc-payments" hidden>
+        <div class="paysum" id="paysum"></div>
+        <div class="paygrid">
+          <div class="panel paypanel">
+            <div class="ptitle"><div><h2>Registration fee pending</h2><p class="sub">Active candidates who have not paid yet. Mark as paid when it comes in.</p></div>
+              <input class="search sm" id="q4" type="search" placeholder="Search" aria-label="Search pending fees"></div>
+            <div class="tablebox short"><table class="data mini" id="t-fee"></table></div>
+          </div>
+          <div class="panel paypanel">
+            <div class="ptitle"><div><h2>Matched candidates</h2><p class="sub">Registration fee, flight contribution and payments to HBN and to Laís. Change a status right in the table.</p></div>
+              <div class="seg" id="f-mpay"></div></div>
+            <div class="tablebox short"><table class="data mini" id="t-mpay"></table></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="view" id="v-matches">
+    <div class="toolbar">
+      <div class="seg" id="f-year" aria-label="Year"></div>
+      <input class="search" id="q2" type="search" placeholder="Search by name or country" aria-label="Search matches">
+    </div>
+    <p class="section-lead" id="m-lead"></p>
+    <div class="tablebox"><table class="data" id="t-matches"></table></div>
+  </section>
+  <section class="view" id="v-docs">
+    <p class="section-lead">Visa paperwork for candidates who already have a family. Pink items are still missing.</p>
+    <div class="docs" id="docs"></div>
+  </section>
+
+  <footer><span id="editor" class="editor"></span><button type="button" class="lockbtn" id="export">Download a backup (data.json)</button> Built from the HBN South America candidates sheet and the au pair registration database. Introduce status and registration fee can be changed on the Active candidates tab.</footer>
+</div>
+<script>
+(async function(){
+const API_URL = (((window.HBN_CONFIG || {}).API_URL || '').trim()).replace(/^PASTE_.*$/,'');
+let RAW;
+try { const r = await fetch('data.json', {cache:'no-store'}); if (!r.ok) throw new Error(r.status); RAW = await r.json(); }
+catch (e) { document.querySelector('.wrap').insertAdjacentHTML('afterbegin', '<p class="loaderr">Could not load data.json. Keep data.json in the same folder as index.html and open the site through its GitHub Pages link.</p>'); return; }
+const D = RAW.data;
+const ORIG = JSON.parse(JSON.stringify(D.active));
+const PH = RAW.photos || {};
+const initials = n => n.split(/\s+/).filter(Boolean).map(w=>w[0]).filter((c,i,a)=>i===0||i===a.length-1).join('').toUpperCase();
+const avatar = (a, cls='av') => PH[a.id] ? `<img class="${cls}" src="${PH[a.id]}" alt="Photo of ${esc(a.name)}">` : `<span class="${cls} ini" aria-hidden="true">${esc(initials(a.name))}</span>`;
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtDate = s => { if(!s) return ''; if(!/^\d{4}-\d{2}-\d{2}$/.test(s)) return esc(s);
+  const d = new Date(s+'T00:00:00'); return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); };
+$('#today').textContent = 'Recruitment dashboard, updated ' + TODAY.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+/* ---------- state: defaults + saved overrides ---------- */
+D.m26.forEach((m,i) => m.mid = 'm26_'+i); D.m25.forEach((m,i) => m.mid = 'm25_'+i);
+const ORIG_M = {m26: JSON.parse(JSON.stringify(D.m26)), m25: JSON.parse(JSON.stringify(D.m25))};
+function applyPay(){ ['m26','m25'].forEach(k => { D[k] = ORIG_M[k].map(o => ({...o, ...(over.mpay[o.mid]||{})})); }); }
+function applyEdits(){ applyPay(); D.active = ORIG.map(o => { const a = {...o, ...(over.edits[o.id]||{})}; Object.keys(a).forEach(k => { if (a[k]==='' || a[k]===null) delete a[k]; }); return a; }); }
+const DEFAULT = {}; D.active.forEach(a => DEFAULT[a.id] = {intro:a.intro, fee:a.fee});
+let over = {intro:{}, fee:{}, checks:{}, cnotes:{}, edits:{}, mpay:{}};
+let lockHash = null, online = false, lastRemote = '';
+const LS = 'hbn-dashboard-state-cache';
+function setOver(s){ s = s || {}; over = {intro:{...(s.intro||{})}, fee:{...(s.fee||{})}, checks:JSON.parse(JSON.stringify(s.checks||{})), cnotes:{...(s.cnotes||{})}, edits:JSON.parse(JSON.stringify(s.edits||{})), mpay:JSON.parse(JSON.stringify(s.mpay||{}))}; lockHash = s.lockHash || null; }
+const stateOut = () => ({...over, lockHash});
+async function fetchRemote(){ const r = await fetch(API_URL + (API_URL.includes('?')?'&':'?') + 't=' + Date.now()); const j = await r.json(); return j && j.state ? j.state : {}; }
+if (API_URL) {
+  try { const s = await fetchRemote(); setOver(s); lastRemote = JSON.stringify(s); online = true; } catch(e) {
+    try { setOver(JSON.parse(localStorage.getItem(LS)||'{}')); } catch(_) {}
+  }
+} else { setOver(RAW.state || {}); try { const c = JSON.parse(localStorage.getItem(LS)||'null'); if (c) setOver(c); } catch(e) {} }
+applyEdits();
+const intro = a => over.intro[a.id] || a.intro;
+const CHECKS = [['interview','Interview done'],['refs','References validated'],['report','Interview report filled']];
+const chk = (a,k) => (over.checks[a.id]||{})[k] || null;
+const chkCount = a => CHECKS.filter(([k]) => chk(a,k)).length;
+const shortDate = s => new Date(s+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+const fee = a => over.fee[a.id] || a.fee;
+let saveTimer = null, saving = false;
+let editKey = null; try { editKey = localStorage.getItem('hbn-edit-key'); } catch(e) {}
+function setSave(t){ ['#save','#save2','#save3'].forEach(s => { const el = $(s); if (el) el.textContent = t; }); renderEditor(); }
+async function revert(msg){ try { const s = await fetchRemote(); setOver(s); lastRemote = JSON.stringify(s); } catch(e) {} applyEdits(); renderAll(); setSave(msg); }
+function persist(){
+  try { localStorage.setItem(LS, JSON.stringify(stateOut())); } catch(e) {}
+  if (!API_URL) { setSave('Saved on this device only (online saving is not set up)'); return; }
+  if (!editKey) {
+    const k = window.prompt('To save changes online, enter the editor key:');
+    if (!k) { revert('Not saved. Only editors can change the dashboard.'); return; }
+    editKey = k.trim(); try { localStorage.setItem('hbn-edit-key', editKey); } catch(e) {}
+  }
+  setSave('Saving…'); clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    saving = true;
+    try {
+      const r = await fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({key: editKey, state: stateOut()})});
+      const j = await r.json();
+      if (j.ok) { lastRemote = JSON.stringify(stateOut()); setSave('Saved online ✓'); }
+      else if (j.error === 'wrong_key') { editKey = null; try { localStorage.removeItem('hbn-edit-key'); } catch(e) {} alert('Wrong editor key. Your change was not saved.'); await revert('Not saved: wrong editor key'); }
+      else setSave('Not saved online. Please try again.');
+    } catch(e) { setSave('No connection. Not saved online yet – try again.'); }
+    saving = false;
+  }, 500);
+}
+function renderEditor(){ const el = $('#editor'); if (!el) return;
+  el.innerHTML = !API_URL ? '' : editKey ? 'Signed in as editor · <button type="button" class="linkbtn" id="signout">Sign out</button>' : '<button type="button" class="linkbtn" id="signin">Editor sign in</button>';
+}
+document.addEventListener('click', e => {
+  if (e.target.id === 'signout') { editKey = null; try { localStorage.removeItem('hbn-edit-key'); } catch(_) {} renderEditor(); }
+  if (e.target.id === 'signin') { const k = window.prompt('Enter the editor key:'); if (k) { editKey = k.trim(); try { localStorage.setItem('hbn-edit-key', editKey); } catch(_) {} renderEditor(); } }
+});
+// refresh from the online copy every 30 seconds so everyone sees the latest version
+if (API_URL) setInterval(async () => {
+  if (saving || saveTimer && document.querySelector('.savebar') && /Saving/.test($('#save').textContent)) return;
+  if (F.edit || (document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))) return;
+  try { const s = await fetchRemote(), js = JSON.stringify(s); if (js !== lastRemote) { lastRemote = js; setOver(s); applyEdits(); renderAll(); } } catch(e) {}
+}, 30000);
+
+/* ---------- password lock for Active candidates ---------- */
+const SALT = 'hbn-sa-active-v1:';
+let unlocked = false; try { unlocked = sessionStorage.getItem('hbn-unlocked') === '1'; } catch(e) {}
+async function sha(s){ const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(SALT+s)); return [...new Uint8Array(buf)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
+function renderLock(msg=''){
+  const box = $('#lock'), body = $('#check-body');
+  box.hidden = unlocked; body.hidden = !unlocked;
+  if (unlocked) return;
+  const creating = !lockHash;
+  box.innerHTML = `<div class="lockcard">
+    <svg width="40" height="40" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5.2" width="8" height="5.8" rx="1.4" fill="var(--plum)"/><path d="M3.9 5.2V3.8a2.1 2.1 0 0 1 4.2 0v1.4" fill="none" stroke="var(--plum)" stroke-width="1.2"/></svg>
+    <h2>${creating ? 'Create a password for Laís Control' : 'Laís Control is password protected'}</h2>
+    <p class="sub">${creating ? 'Choose the password that will open Laís Control. You will use it every time you open the dashboard.' : 'Enter the password to see your interviews, references and interview reports.'}</p>
+    <form id="lockform" autocomplete="off">
+      <input type="password" id="pw1" class="search" placeholder="${creating?'New password':'Password'}" aria-label="Password" required minlength="4">
+      ${creating ? '<input type="password" id="pw2" class="search" placeholder="Repeat password" aria-label="Repeat password" required minlength="4">' : ''}
+      <button type="submit" class="unlock">${creating ? 'Save password and open' : 'Open tab'}</button>
+    </form>
+    <p class="err" role="alert">${esc(msg)}</p></div>`;
+  $('#lockform').onsubmit = async e => {
+    e.preventDefault();
+    const p1 = $('#pw1').value;
+    if (creating) {
+      if (p1.length < 4) return renderLock('Use at least 4 characters.');
+      if (p1 !== $('#pw2').value) return renderLock('The two passwords are different. Type them again.');
+      lockHash = await sha(p1); persist();
+    } else if (await sha(p1) !== lockHash) { return renderLock('Wrong password. Try again.'); }
+    unlocked = true; try { sessionStorage.setItem('hbn-unlocked','1'); } catch(e) {}
+    renderLock(); renderChecklist(); renderPayments();
+  };
+  setTimeout(() => { const i = $('#pw1'); if (i && $('#v-check').classList.contains('on')) i.focus(); }, 0);
+}
+
+/* ---------- editable fields ---------- */
+const SKILL_OPTS = ['','Yes, 5/5','Yes, 4/5','Yes, 3/5','Yes, 2/5','Yes, 1/5','Yes','No'];
+const YN = ['','Yes','No'], YNM = ['','Yes','Yes, only host mom','No'];
+const FIELDS = [
+  ['Basic information'],
+  ['name','Full name'],['age','Age','number'],['country','Country'],['city','City'],['phone','Mobile'],['email','Email'],
+  ['group','Group',['Being introduced','New / incomplete profile','Hold']],['stars','Stars (0–5)',['','0','1','2','3','4','5']],['start','Available from','date'],
+  ['Languages & background'],
+  ['english','English level',['','Native','Excellent','Advanced','Good','Average','Poor']],['languages','Languages'],['education','Education'],['job','Current job'],
+  ['hours','Childcare hours'],['experience','Childcare experience','textarea'],['before','Au pair before',YN],
+  ['Family preferences'],
+  ['maxkids','Max. number of kids','number'],['ages','Children ages'],['location','Preferred location'],['single','Single parent',YNM],['stayhome','Stay-at-home parent',YNM],['pets','Pets',YN],
+  ['Skills'],
+  ['drive','Drives',SKILL_OPTS],['biking','Biking',SKILL_OPTS],['swimming','Swimming',SKILL_OPTS],['diet','Diet'],
+  ['Profile & documents'],
+  ['ticket','Ticket option (€)','number'],['video','Video',['','Available','Missing']],['letter','Host family letter',['','Provided','Not Provided']],
+  ['refs','References (Laís)',['','Pending','Sent','ok']],['passport','Passport'],['stage','HBN journey stage'],['hbnstatus','HBN status',['','Pending Review','Verified','Re-Match','On Hold']],
+  ['notes','Notes','textarea']];
+function editForm(a){
+  let h = '<form class="eform" data-edit="'+a.id+'"><div class="egrid">';
+  FIELDS.forEach(f => {
+    if (f.length === 1) { h += `<h3 class="esec">${f[0]}</h3>`; return; }
+    const [k,l,t] = f, v = a[k]===undefined || a[k]===null ? '' : String(a[k]), id = 'e_'+k;
+    let inp;
+    if (Array.isArray(t)) { const opts = t.includes(v) ? t : [v, ...t]; inp = `<select id="${id}" name="${k}">${opts.map(o => `<option value="${esc(o)}" ${o===v?'selected':''}>${o===''?'Pending information':esc(o)}</option>`).join('')}</select>`; }
+    else if (t==='textarea') inp = `<textarea id="${id}" name="${k}" rows="3">${esc(v)}</textarea>`;
+    else inp = `<input id="${id}" name="${k}" type="${t||'text'}" value="${esc(v)}" ${t==='number'?'min="0"':''}>`;
+    h += `<label class="ef ${t==='textarea'?'wide':''}" for="${id}"><span>${l}</span>${inp}</label>`;
+  });
+  return h + `</div><div class="eactions"><button type="submit" class="esave">Save changes</button><button type="button" class="ecancel" data-cancel="1">Cancel</button><button type="button" class="ereset" data-reset="${a.id}" ${over.edits[a.id]?'':'hidden'}>Undo all my edits for this candidate</button></div></form>`;
+}
+function saveEdits(id, form){
+  const o = ORIG.find(x => x.id===id), ed = {};
+  FIELDS.filter(f => f.length>1).forEach(([k,,t]) => {
+    let v = form.elements[k].value.trim();
+    if (t==='number' || k==='stars') v = v==='' ? '' : Number(v);
+    const ov = o[k]===undefined || o[k]===null ? '' : o[k];
+    if (String(v) !== String(ov)) ed[k] = v;
+  });
+  if (Object.keys(ed).length) over.edits[id] = ed; else delete over.edits[id];
+  applyEdits(); F.edit = null; renderAll(); persist();
+}
+
+/* ---------- helpers ---------- */
+const PEND = '<span class="pend">Pending information</span>';
+const skillHTML = v => { if (!v) return PEND; const m = String(v).match(/^Yes,\s*(\d)\/5/); if (m) return `Yes <span class="stars" aria-label="${m[1]} of 5">${'★'.repeat(+m[1])}<span class="off">${'★'.repeat(5-+m[1])}</span></span>`; return esc(v); };
+const yesno = v => !v ? null : /^yes/i.test(v) ? 'Yes' : /^no/i.test(v) ? 'No' : null;
+const ENG_ORDER = ['Native','Excellent','Advanced','Good','Average','Poor'];
+function ring(parts, size=128, stroke=16, center=''){
+  const r = (size-stroke)/2, C = 2*Math.PI*r, total = parts.reduce((s,p)=>s+p.v,0) || 1;
+  let off = 0, arcs = '';
+  parts.forEach(p => { const len = C*p.v/total;
+    arcs += `<circle r="${r}" cx="${size/2}" cy="${size/2}" fill="none" stroke="${p.c}" stroke-width="${stroke}" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 ${size/2} ${size/2})" stroke-linecap="butt"/>`;
+    off += len; });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${esc(parts.map(p=>p.l+': '+p.v).join(', '))}">
+    <circle r="${r}" cx="${size/2}" cy="${size/2}" fill="none" stroke="var(--lilac-2)" stroke-width="${stroke}"/>${arcs}
+    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" class="ring-center" style="font-family:var(--serif);font-size:26px;font-weight:600;fill:var(--ink)">${center}</text></svg>`;
+}
+const pct = (a,b) => b ? Math.round(100*a/b) : 0;
+function stage(m){ if(!m.arrival || !/^\d{4}-/.test(m.arrival)) return 'Date TBD';
+  return new Date(m.arrival+'T00:00:00') <= TODAY ? 'Arrived in NL' : 'Travel booked'; }
+const chipFor = (v) => {
+  const good = ['Paid','ok','Valid','VISA uploaded','Arrived in NL','Completed','Uploaded','Ready to introduce','Full'];
+  const bad = ['Pending','Pending docs','Cancelled','pending','Date TBD'];
+  if (!v) return '';
+  const cls = good.includes(v) ? 'c-good' : (bad.includes(v) || /^pending/i.test(v)) ? 'c-bad' : 'c-mid';
+  return `<span class="chip ${cls}">${esc(v)}</span>`;
+};
+
+/* ---------- overview ---------- */
+function renderOverview(){
+  const A = D.active, n = A.length;
+  const ready = A.filter(a => intro(a)==='ready').length;
+  const paid = A.filter(a => fee(a)==='Paid').length;
+  const readyPaid = A.filter(a => intro(a)==='ready' && fee(a)==='Paid').length;
+  const paidNotReady = A.filter(a => intro(a)!=='ready' && fee(a)==='Paid').length;
+  const groups = ['Being introduced','New / incomplete profile','Hold'];
+  const m26 = D.m26, st = {a:0,b:0,t:0}; m26.forEach(m => { const s = stage(m); s==='Arrived in NL'?st.a++:s==='Travel booked'?st.b++:st.t++; });
+  const docsPending = D.docs.filter(d => Object.values(d).some(v => /^pending/i.test(String(v)))).length;
+  const todo = [
+    ['Registration fee still to receive', m26.filter(m=>m.fee==='Pending').length],
+    ['Payment to HBN pending', m26.filter(m=>m.paidHBN==='Pending').length],
+    ['Payment to Laís pending', m26.filter(m=>m.paidLais==='Pending').length],
+    ['Flight contribution to be paid', m26.filter(m=>/to be paid/i.test(m.ticket||'')).length],
+    ['References not yet valid', m26.filter(m=>m.refs==='Pending').length],
+    ['Candidates missing visa documents', docsPending],
+  ];
+  const visaOrder = ['VISA uploaded','Approval letter','Documents ok','TEV in progress','Pending docs'];
+  const visa = visaOrder.map(v => [v, m26.filter(m=>m.visa===v).length]);
+  const vmax = Math.max(...visa.map(v=>v[1]),1);
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const byMonth = (arr, yr, keep=()=>true) => months.map((_,i) => arr.filter(m => keep(m) && m.match && m.match.startsWith(`${yr}-${String(i+1).padStart(2,'0')}`)).length);
+  const c26 = byMonth(D.m26, 2026), c25 = byMonth(D.m25, 2025, m => m.status !== 'Cancelled');
+  const cmax = Math.max(...c26, ...c25, 1);
+  const W=560, H=210, pad=26, bw=(W-pad*2)/12;
+  let bars = '';
+  months.forEach((mo,i) => {
+    const x = pad + i*bw, h25 = (H-50)*c25[i]/cmax, h26 = (H-50)*c26[i]/cmax;
+    bars += `<rect x="${x+bw*.18}" y="${H-28-h25}" width="${bw*.3}" height="${h25}" rx="4" fill="var(--blush)"><title>${mo} 2025: ${c25[i]}</title></rect>`;
+    bars += `<rect x="${x+bw*.5}" y="${H-28-h26}" width="${bw*.3}" height="${h26}" rx="4" fill="var(--plum)"><title>${mo} 2026: ${c26[i]}</title></rect>`;
+    if (c26[i]) bars += `<text x="${x+bw*.65}" y="${H-34-h26}" text-anchor="middle" style="fill:var(--plum);font-weight:700">${c26[i]}</text>`;
+    bars += `<text x="${x+bw/2}" y="${H-8}" text-anchor="middle">${mo}</text>`;
+  });
+  const yr = (arr, keep=()=>true) => { const k = arr.filter(keep); return [k.filter(m=>m.type==='Full').length, k.filter(m=>m.type==='Self Match').length, k.length]; };
+  const y26 = yr(D.m26), y25 = yr(D.m25, m=>m.status!=='Cancelled'), y24 = yr(D.m24);
+
+  $('#v-overview').innerHTML = `
+  <p class="hero"><span class="n">${ready}</span> of ${n} active candidates are ready to introduce, and <span class="n">${paid}</span> have already paid the registration fee.</p>
+  <div class="grid g-3">
+    <div class="panel">
+      <h2>Ready to introduce</h2><p class="sub">Change it on the Active candidates tab</p>
+      <div class="ringrow">${ring([{v:ready,c:'var(--plum)',l:'Ready'},{v:n-ready,c:'var(--blush)',l:'Not ready'}],128,16,pct(ready,n)+'%')}
+        <div class="legend"><div><span class="dot" style="background:var(--plum)"></span><b>${ready}</b> ready</div>
+        <div><span class="dot" style="background:var(--blush)"></span><b>${n-ready}</b> not ready</div></div></div>
+      <div class="faces" aria-label="Candidates ready to introduce">${A.filter(a=>intro(a)==='ready').map(a => PH[a.id]?`<img src="${PH[a.id]}" alt="${esc(a.name)}" title="${esc(a.name)}">`:`<span class="av ini" title="${esc(a.name)}" style="width:40px;height:40px;font-size:14px">${esc(initials(a.name))}</span>`).join('')}</div>
+    </div>
+    <div class="panel">
+      <h2>Registration fee</h2><p class="sub">Among active candidates</p>
+      <div class="ringrow">${ring([{v:paid,c:'var(--orchid)',l:'Paid'},{v:n-paid,c:'var(--lilac-2)',l:'Pending'}],128,16,pct(paid,n)+'%')}
+        <div class="legend"><div><span class="dot" style="background:var(--orchid)"></span><b>${paid}</b> paid</div>
+        <div><span class="dot" style="background:var(--lilac)"></span><b>${n-paid}</b> pending</div></div></div>
+    </div>
+    <div class="panel">
+      <h2>By group</h2><p class="sub">Darker part of each bar is ready to introduce</p>
+      <div class="bars">${groups.map(g => { const G = A.filter(a=>a.group===g), r = G.filter(a=>intro(a)==='ready').length, p = G.filter(a=>fee(a)==='Paid').length;
+        return `<div class="barline"><div class="lbl"><span>${g}</span><span>${G.length} · ${p} paid</span></div>
+          <div class="track"><i class="grow" style="width:${pct(r,n)}%;background:var(--plum)"></i><i class="grow" style="width:${pct(G.length-r,n)}%;background:var(--lilac)"></i></div></div>`; }).join('')}
+        <div class="barline"><div class="lbl"><span>Paid the fee but not ready yet</span><span>${paidNotReady}</span></div></div>
+        <div class="barline"><div class="lbl"><span>Ready and paid</span><span>${readyPaid}</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Matches in 2026</h2>
+  <p class="section-lead">Where the ${m26.length} matched au pairs are on their way to the Netherlands, and what is still open.</p>
+  <div class="grid g-2">
+    <div class="panel">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><span class="bignum">${m26.length}</span><span>matches so far this year, ${y26[0]} full and ${y26[1]} self match</span></div>
+      <div class="stack" role="img" aria-label="Arrived ${st.a}, travel booked ${st.b}, date to be defined ${st.t}">
+        <i class="grow" style="width:${pct(st.a,m26.length)}%;background:var(--plum)"></i><i class="grow" style="width:${pct(st.b,m26.length)}%;background:var(--orchid)"></i><i class="grow" style="width:${pct(st.t,m26.length)}%;background:var(--blush)"></i></div>
+      <div class="keys">
+        <div><span class="dot" style="background:var(--plum)"></span>Arrived in NL<b>${st.a}</b></div>
+        <div><span class="dot" style="background:var(--orchid)"></span>Travel booked<b>${st.b}</b></div>
+        <div><span class="dot" style="background:var(--blush)"></span>Arrival date to define<b>${st.t}</b></div>
+      </div>
+      <h2 style="margin-top:26px">Next arrivals</h2><p class="sub">Au pairs with a booked arrival date</p>
+      <ul class="todo">${m26.filter(m=>stage(m)==='Travel booked').sort((x,y)=>x.arrival.localeCompare(y.arrival)).slice(0,6)
+        .map(m => `<li><span>${esc(m.name)}</span><span style="color:var(--plum);font-weight:600">${fmtDate(m.arrival)}</span></li>`).join('') || '<li>No arrival booked right now.</li>'}</ul>
+    </div>
+    <div class="panel">
+      <h2>Still open</h2><p class="sub">Match 2026 and visa documents</p>
+      <ul class="todo">${todo.map(([l,c]) => `<li><span>${l}</span><span class="count ${c?'hot':'zero'}">${c}</span></li>`).join('')}</ul>
+    </div>
+  </div>
+  <div class="grid g-2" style="margin-top:18px">
+    <div class="panel">
+      <h2>Matches per month</h2><p class="sub"><span class="dot" style="background:var(--plum)"></span>2026 <span class="dot" style="background:var(--blush);margin-left:14px"></span>2025, by match date</p>
+      <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Matches per month in 2026 and 2025">${bars}</svg>
+    </div>
+    <div class="panel">
+      <h2>Visa status</h2><p class="sub">Match 2026</p>
+      <div class="bars">${visa.map(([v,c]) => `<div class="barline"><div class="lbl"><span>${v}</span><span>${c}</span></div>
+        <div class="track"><i class="grow" style="width:${100*c/vmax}%;background:${v==='Pending docs'?'var(--rose)':'var(--orchid)'}"></i></div></div>`).join('')}</div>
+    </div>
+  </div>
+  <div class="grid g-2b" style="margin-top:18px">
+    <div class="panel">
+      <h2>Year by year</h2><p class="sub">Completed matches, full and self match</p>
+      <table class="yrs"><thead><tr><th>Year</th><th>Full</th><th>Self match</th><th>Total</th></tr></thead><tbody>
+      ${[['2026',y26],['2025',y25],['2024',y24]].map(([y,v]) => `<tr><td>${y}</td><td>${v[0]}</td><td>${v[1]}</td><td><b>${v[2]}</b></td></tr>`).join('')}</tbody></table>
+    </div>
+    <div class="panel">
+      <h2>Active candidates by country</h2><p class="sub">With how many are ready</p>
+      <div class="bars">${[...new Set(A.map(a=>a.country||'Not informed'))].map(c => { const C = A.filter(a=>(a.country||'Not informed')===c), r=C.filter(a=>intro(a)==='ready').length;
+        return `<div class="barline"><div class="lbl"><span>${esc(c)}</span><span>${C.length} · ${r} ready</span></div><div class="track"><i class="grow" style="width:${pct(r,n)}%;background:var(--plum)"></i><i class="grow" style="width:${pct(C.length-r,n)}%;background:var(--lilac)"></i></div></div>`; }).join('')}</div>
+    </div>
+  </div>`;
+}
+
+/* ---------- active table ---------- */
+const F = {group:'All', intro:'All', fee:'All', check:'All', q:'', open:null, edit:null};
+function seg(el, opts, key){
+  el.innerHTML = opts.map(o => `<button type="button" aria-pressed="${F[key]===o[0]}" data-v="${esc(o[0])}">${esc(o[1])}</button>`).join('');
+  el.onclick = e => { const b = e.target.closest('button'); if(!b) return; F[key] = b.dataset.v; renderActive(); };
+}
+function renderActive(){
+  seg($('#f-group'), [['All','All groups'],['Being introduced','Being introduced'],['New / incomplete profile','New'],['Hold','Hold']], 'group');
+  seg($('#f-intro'), [['All','Any status'],['ready','Ready'],['not','Not ready']], 'intro');
+  seg($('#f-fee'), [['All','Any fee'],['Paid','Paid'],['Pending','Pending']], 'fee');
+  const q = F.q.toLowerCase();
+  const rows = D.active.filter(a => (F.group==='All'||a.group===F.group) && (F.intro==='All'||intro(a)===F.intro) && (F.fee==='All'||fee(a)===F.fee)
+    && (!q || [a.name,a.city,a.country,a.email].join(' ').toLowerCase().includes(q)));
+  let h = `<thead><tr><th>Candidate</th><th>Introduce</th><th>Registration fee</th><th>Group</th><th>Stars</th><th>Available from</th><th>English</th><th>Age</th><th>Mobile</th></tr></thead><tbody>`;
+  if (!rows.length) h += `<tr><td colspan="9" class="empty">No candidate matches these filters. Clear the search or pick "All groups".</td></tr>`;
+  rows.forEach(a => {
+    const iv = intro(a), fv = fee(a);
+    h += `<tr class="row" data-id="${a.id}">
+      <td><div class="who">${avatar(a)}<button class="nm" data-open="${a.id}" aria-expanded="${F.open===a.id}" title="View more information"><span class="nm-t">${esc(a.name)}</span><small>${esc([a.city,a.country].filter(Boolean).join(', ')||'Location not informed')}</small><span class="more">${F.open===a.id?'Hide information':'View more information'}<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="${F.open===a.id?'M2 6.5 5 3.5 8 6.5':'M2 3.5 5 6.5 8 3.5'}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></button></div></td>
+      <td><span class="toggle" role="group" aria-label="Introduce status for ${esc(a.name)}">
+        <button type="button" class="yes ${iv==='ready'?'on':''}" aria-pressed="${iv==='ready'}" data-set="intro" data-val="ready">Ready to introduce</button>
+        <button type="button" class="no ${iv!=='ready'?'on':''}" aria-pressed="${iv!=='ready'}" data-set="intro" data-val="not">Not ready</button></span></td>
+      <td><span class="toggle" role="group" aria-label="Registration fee for ${esc(a.name)}">
+        <button type="button" class="yes ${fv==='Paid'?'on':''}" aria-pressed="${fv==='Paid'}" data-set="fee" data-val="Paid">Paid</button>
+        <button type="button" class="no ${fv!=='Paid'?'on':''}" aria-pressed="${fv!=='Paid'}" data-set="fee" data-val="Pending">Pending</button></span></td>
+      <td><span class="chip ${a.group==='Being introduced'?'c-good':a.group==='Hold'?'c-bad':'c-mid'}">${esc(a.group)}</span></td>
+      <td class="stars" aria-label="${a.stars||0} stars">${a.stars ? '★'.repeat(a.stars) : '<span style="color:var(--muted)">not rated</span>'}</td>
+      <td>${a.start?fmtDate(a.start):'<span class="pend sm">Pending</span>'}</td><td>${a.english?esc(a.english):'<span class="pend sm">Pending</span>'}</td><td>${a.age?esc(a.age):'<span class="pend sm">Pending</span>'}</td><td>${a.phone?esc(a.phone):'<span class="pend sm">Pending</span>'}</td></tr>`;
+    if (F.open === a.id) {
+      const f = [['Email',a.email],['Mobile',a.phone],['City',a.city],['Available from',a.start?fmtDate(a.start):''],['English',a.english],['Languages',a.languages],['Education',a.education],['Current job',a.job],
+        ['Childcare hours',a.hours],['Childcare experience',a.experience],['Au pair before',a.before],['Max. kids',a.maxkids],['Children ages',a.ages],['Preferred location',a.location],['Single parent',a.single],
+        ['Stay-at-home parent',a.stayhome],['Pets',a.pets],['Drives',a.drive,1],['Biking',a.biking,1],['Swimming',a.swimming,1],['Diet',a.diet],['Ticket option',a.ticket?('€ '+a.ticket):''],
+        ['Video',a.video],['Host family letter',a.letter],['References (Laís)',a.refs],['Passport',a.passport],['HBN journey stage',a.stage],['HBN status',a.hbnstatus]];
+      if (F.edit === a.id) { h += `<tr class="detail" data-id="${a.id}"><td colspan="9"><div class="inner">${avatar(a,'big')}<div style="flex:1;min-width:0"><div class="ehead"><b>Editing ${esc(a.name)}</b><span>Empty fields show as "Pending information".</span></div>${editForm(a)}</div></div></td></tr>`; return; }
+      h += `<tr class="detail" data-id="${a.id}"><td colspan="9"><div class="inner">${avatar(a,'big')}<div style="flex:1;min-width:0"><div class="ehead"><span>${over.edits[a.id]?'<span class="chip c-mid">Edited by you</span>':''}</span><button type="button" class="ebtn" data-editopen="${a.id}"><svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 10.5V12h1.5l7-7L9 3.5l-7 7ZM10 2.5 11.5 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Edit information</button></div><div class="dl">${f.map(([k,v,s]) => `<div><span>${k}</span><b>${s ? skillHTML(v) : (v===0||v ? (k==='Available from'?v:esc(v)) : PEND)}</b></div>`).join('')}</div>${a.notes?`<div class="note">${esc(a.notes)}</div>`:''}
+        </div></div></td></tr>`;
+    }
+  });
+  $('#t-active').innerHTML = h + '</tbody>';
+}
+$('#t-active').addEventListener('click', e => {
+  const eo = e.target.closest('[data-editopen]'); if (eo) { F.edit = eo.dataset.editopen; renderActive(); setTimeout(() => { const i = document.getElementById('e_name'); if (i) i.focus(); }, 0); return; }
+  if (e.target.closest('[data-cancel]')) { F.edit = null; renderActive(); return; }
+  const rs = e.target.closest('[data-reset]'); if (rs) { if (confirm('Undo all your edits for this candidate and go back to the original information?')) { delete over.edits[rs.dataset.reset]; applyEdits(); F.edit = null; renderAll(); persist(); } return; }
+  if (e.target.closest('.eform')) return;
+  const o = e.target.closest('[data-open]'); if (o) { F.open = F.open===o.dataset.open ? null : o.dataset.open; F.edit = null; renderActive(); return; }
+  const b = e.target.closest('[data-set]'); if (!b) return;
+  const id = b.closest('tr').dataset.id, key = b.dataset.set, val = b.dataset.val;
+  if (val === DEFAULT[id][key]) delete over[key][id]; else over[key][id] = val;
+  renderActive(); renderOverview(); renderReady(); persist();
+});
+$('#q').addEventListener('input', e => { F.q = e.target.value; renderActive(); });
+$('#t-active').addEventListener('submit', e => { const f = e.target.closest('.eform'); if (!f) return; e.preventDefault(); saveEdits(f.dataset.edit, f); });
+
+
+/* ---------- matches ---------- */
+const M = {year:'2026', q:''};
+function renderMatches(){
+  const ys = $('#f-year');
+  ys.innerHTML = ['2026','2025','2024'].map(y => `<button type="button" aria-pressed="${M.year===y}" data-v="${y}">${y}</button>`).join('');
+  ys.onclick = e => { const b = e.target.closest('button'); if(b){ M.year = b.dataset.v; renderMatches(); } };
+  const arr = M.year==='2026'?D.m26:M.year==='2025'?D.m25:D.m24;
+  const q = M.q.toLowerCase(), rows = arr.filter(m => !q || [m.name,m.country].join(' ').toLowerCase().includes(q));
+  let cols;
+  if (M.year==='2026') cols = [['Match date',m=>fmtDate(m.match)],['Type',m=>esc(m.type)],['Country',m=>esc(m.country)],['Stage',m=>chipFor(stage(m))],['Arrival NL',m=>fmtDate(m.arrival)],
+     ['Visa',m=>chipFor(m.visa)],['Reg. fee',m=>chipFor(m.fee)],['Ticket',m=>esc(m.ticket)],['Paid to HBN',m=>chipFor(m.paidHBN)],['Paid to Laís',m=>chipFor(m.paidLais)],['References',m=>chipFor(m.refs)],['Airport',m=>esc(m.airport||'')],['Notes',m=>`<span style="color:var(--muted)">${esc(m.notes||'')}</span>`]];
+  else if (M.year==='2025') cols = [['Match date',m=>fmtDate(m.match)],['Type',m=>esc(m.type)],['Country',m=>esc(m.country)],['Status',m=>chipFor(m.status)],['Arrival NL',m=>fmtDate(m.arrival)],['Embassy',m=>fmtDate(m.embassy)],
+     ['Reg. fee',m=>chipFor(m.fee)],['Ticket',m=>esc(m.ticket||'')],['Paid to HBN',m=>chipFor(m.paidHBN)],['Paid to Laís',m=>chipFor(m.paidLais)],['References',m=>chipFor(m.refs)]];
+  else cols = [['Type',m=>esc(m.type)],['Country',m=>esc(m.country)],['Reg. fee',m=>chipFor(m.fee)],['Ticket',m=>esc(m.ticket||'')],['Paid to HBN',m=>esc(m.paidHBN||'')],['Paid to Laís',m=>esc(m.paidLais||'')],['Embassy',m=>fmtDate(m.embassy)],['Arrival NL',m=>fmtDate(m.arrival)]];
+  const full = arr.filter(m=>m.type==='Full').length, self = arr.filter(m=>m.type==='Self Match').length, canc = arr.filter(m=>m.status==='Cancelled').length;
+  $('#m-lead').textContent = `${arr.length - canc} matches in ${M.year}: ${full - (M.year==='2025'?arr.filter(m=>m.status==='Cancelled'&&m.type==='Full').length:0)} full and ${self - (M.year==='2025'?arr.filter(m=>m.status==='Cancelled'&&m.type==='Self Match').length:0)} self match` + (canc?`, plus ${canc} cancelled.`:'.');
+  let h = `<thead><tr><th>Au pair</th>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr></thead><tbody>`;
+  if (!rows.length) h += `<tr><td colspan="${cols.length+1}" class="empty">No match with that name or country.</td></tr>`;
+  rows.forEach(m => { h += `<tr class="row"><td><span class="nm" style="cursor:default">${esc(m.name)}</span></td>${cols.map(c=>`<td>${c[1](m)||''}</td>`).join('')}</tr>`; });
+  $('#t-matches').innerHTML = h + '</tbody>';
+}
+$('#q2').addEventListener('input', e => { M.q = e.target.value; renderMatches(); });
+
+/* ---------- docs ---------- */
+function renderDocs(){
+  const L = [['matching','Matching docs'],['medical','Medical'],['nm','Non-marital & birth'],['passport','Passport'],['criminal','Criminal clearance'],['antecedents','Antecedents form (IND)'],['refs','References checked']];
+  $('#docs').innerHTML = D.docs.map(d => { const miss = L.filter(([k]) => /^pending/i.test(d[k]||'')).length;
+    return `<div class="panel"><h2>${esc(d.name)}</h2><p class="sub">Embassy in ${esc(d.embassy||'–')} · ${miss ? miss+' item'+(miss>1?'s':'')+' missing' : 'all uploaded'}</p>
+    <ul class="check">${L.map(([k,l]) => `<li><span>${l}</span>${chipFor(d[k]&&/^pending/i.test(d[k])?'Pending':(d[k]||''))}</li>`).join('')}</ul>
+    ${/\(/.test(d.nm||'')?`<div class="note">${esc(d.nm.replace(/^pending\s*/i,''))}</div>`:''}</div>`; }).join('');
+}
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('nav.tabs button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('nav.tabs button').forEach(x => x.setAttribute('aria-selected', x===b));
+  document.querySelectorAll('section.view').forEach(s => s.classList.toggle('on', s.id === 'v-'+b.dataset.view));
+  if (b.dataset.view === 'check') renderLock();
+}));
+const RF = {eng:'All', by:'All', kids:'All', drive:'All', pets:'All'};
+function renderReady(){
+  const R0 = D.active.filter(a => intro(a)==='ready');
+  const months = [...new Set(R0.filter(a=>a.start).map(a=>a.start.slice(0,7)))].sort();
+  const mLabel = ym => new Date(ym+'-01T00:00:00').toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+  const sel = (id,label,opts) => `<label class="rf"><span>${label}</span><select data-rf="${id}">${opts.map(([v,t]) => `<option value="${esc(v)}" ${RF[id]===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label>`;
+  $('#rfilters').innerHTML =
+    sel('eng','English level',[['All','Any level'],...ENG_ORDER.slice(0,5).map(l=>[l,l+(l==='Native'?'':' or better')])]) +
+    sel('by','Available to travel by',[['All','Any date'],...months.map(m=>[m,mLabel(m)])]) +
+    sel('kids','Number of children',[['All','Any'],['1','1 or more'],['2','2 or more'],['3','3 or more'],['4','4 or more']]) +
+    sel('drive','Drives',[['All','Any'],['Yes','Yes'],['No','No']]) +
+    sel('pets','Accepts pets',[['All','Any'],['Yes','Yes'],['No','No']]) +
+    `<button type="button" class="rclear" id="rclear" ${Object.values(RF).every(v=>v==='All')?'disabled':''}>Clear filters</button>`;
+  const R = R0.filter(a => {
+    if (RF.eng!=='All') { const i = ENG_ORDER.indexOf(a.english); if (i<0 || i > ENG_ORDER.indexOf(RF.eng)) return false; }
+    if (RF.by!=='All') { if (!a.start || a.start.slice(0,7) > RF.by) return false; }
+    if (RF.kids!=='All') { if (!(+a.maxkids >= +RF.kids)) return false; }
+    if (RF.drive!=='All' && yesno(a.drive)!==RF.drive) return false;
+    if (RF.pets!=='All' && yesno(a.pets)!==RF.pets) return false;
+    return true; });
+  $('#ready-lead').textContent = !R0.length ? 'No candidate is marked as ready to introduce yet.'
+    : R.length===R0.length ? `${R0.length} candidate${R0.length>1?'s are':' is'} ready to be introduced to host families.`
+    : `Showing ${R.length} of ${R0.length} candidates ready to introduce.`;
+  const row = (k,v,s) => `<div class="rr"><span>${k}</span><b>${s ? skillHTML(v) : (v===0||v ? esc(v) : PEND)}</b></div>`;
+  $('#ready-grid').innerHTML = (R0.length && !R.length) ? '<p class="empty">No candidate matches these filters. Change a filter or clear them all.</p>' : R.map(a => `<article class="rcard">
+    <div class="rbody">
+      <div class="rhead">${PH[a.id] ? `<img class="rphoto" src="${PH[a.id]}" alt="Photo of ${esc(a.name)}">` : `<div class="rphoto ini">${esc(initials(a.name))}</div>`}
+      <div><h2>${esc(a.name)}</h2>
+      <p class="rmeta">${esc([a.age ? a.age+' years old' : '', [a.city,a.country].filter(Boolean).join(', ')].filter(Boolean).join(' · '))}</p></div></div>
+      <div class="rtags"><span class="chip c-good">${a.start?'Available '+fmtDate(a.start):'Availability pending'}</span>${a.video==='Available'?'<span class="chip c-mid">Video</span>':''}${a.letter==='Provided'?'<span class="chip c-mid">Host family letter</span>':''}${a.stars?`<span class="chip c-mid stars">${'★'.repeat(a.stars)}</span>`:''}</div>
+      ${row('English', a.english)}${row('Languages', a.languages)}${row('Education', a.education)}${row('Childcare experience', a.experience || a.hours)}
+      ${row('Children', [a.maxkids ? 'up to '+a.maxkids : '', a.ages].filter(Boolean).join(', '))}${row('Au pair before', a.before)}${row('Drives', a.drive, 1)}${row('Pets', a.pets)}
+      ${row('Biking', a.biking, 1)}${row('Swimming', a.swimming, 1)}
+    </div></article>`).join('');
+}
+$('#rfilters').addEventListener('change', e => { const s = e.target.closest('[data-rf]'); if (s) { RF[s.dataset.rf] = s.value; renderReady(); } });
+$('#rfilters').addEventListener('click', e => { if (e.target.id==='rclear') { Object.keys(RF).forEach(k=>RF[k]='All'); renderReady(); } });
+const CF = {prog:'All', ready:'All', q:''};
+const CHK_SVG = '<svg width="12" height="12" viewBox="0 0 10 10"><path d="M1.8 5.2 4 7.3 8.3 2.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function renderChecklist(){
+  seg2($('#f-check'), [['All','All'],['todo','To do'],['done','Done']], 'prog');
+  seg2($('#f-cready'), [['All','Any status'],['ready','Ready'],['not','Not ready']], 'ready');
+  const A = D.active, done = k => A.filter(a => chk(a,k)).length, full = A.filter(a => chkCount(a)===3).length;
+  $('#agentbar').innerHTML = `<div class="ab-title"><b>Laís Control</b><span>${full} of ${A.length} candidates fully done</span></div>
+    ${CHECKS.map(([k,l]) => `<div class="ab-item"><span>${l}</span><b>${done(k)} <small>of ${A.length}</small></b><div class="track"><i style="width:${pct(done(k),A.length)}%;background:var(--plum)"></i></div></div>`).join('')}`;
+  const q = CF.q.toLowerCase();
+  const rows = A.filter(a => (CF.prog==='All' || (CF.prog==='done' ? chkCount(a)===3 : chkCount(a)<3)) && (CF.ready==='All' || intro(a)===CF.ready) && (!q || a.name.toLowerCase().includes(q)))
+    .sort((x,y) => (intro(y)==='ready') - (intro(x)==='ready') || chkCount(y) - chkCount(x) || x.name.localeCompare(y.name));
+  $('#clist').innerHTML = rows.length ? rows.map(a => { const n = chkCount(a);
+    return `<article class="ccard ${n===3?'full':''}" data-id="${a.id}">
+      <header>${avatar(a)}<div class="cname"><b>${esc(a.name)}</b><span>${intro(a)==='ready'?'<span class="chip c-good">Ready to introduce</span>':'<span class="chip c-mid">Not ready</span>'}</span></div>
+        <span class="cprog" aria-label="${n} of 3 done">${n}/3</span></header>
+      <ul>${CHECKS.map(([k,l]) => { const v = chk(a,k);
+        return `<li><button type="button" class="citem ${v?'on':''}" data-check="${k}" aria-pressed="${!!v}"><span class="cbox">${v?CHK_SVG:''}</span><span class="clabel">${l}</span><span class="cdate">${v?'Done '+shortDate(v):'To do'}</span></button></li>`; }).join('')}</ul>
+      <textarea class="cnote" data-note="${a.id}" rows="2" placeholder="Notes for this candidate (optional)">${esc(over.cnotes[a.id]||'')}</textarea>
+    </article>`; }).join('') : '<p class="empty">No candidate matches these filters.</p>';
+}
+function seg2(el, opts, key){
+  el.innerHTML = opts.map(o => `<button type="button" aria-pressed="${CF[key]===o[0]}" data-v="${esc(o[0])}">${esc(o[1])}</button>`).join('');
+  el.onclick = e => { const bt = e.target.closest('button'); if(!bt) return; CF[key] = bt.dataset.v; renderChecklist(); };
+}
+$('#clist').addEventListener('click', e => {
+  const c = e.target.closest('[data-check]'); if (!c) return;
+  const id = c.closest('[data-id]').dataset.id, k = c.dataset.check, cur = {...(over.checks[id]||{})};
+  if (cur[k]) delete cur[k]; else cur[k] = new Date().toISOString().slice(0,10);
+  if (Object.keys(cur).length) over.checks[id] = cur; else delete over.checks[id];
+  renderChecklist(); persist();
+});
+let noteTimer = null;
+$('#clist').addEventListener('input', e => {
+  const t = e.target.closest('[data-note]'); if (!t) return;
+  const v = t.value.trim(); if (v) over.cnotes[t.dataset.note] = t.value; else delete over.cnotes[t.dataset.note];
+  clearTimeout(noteTimer); noteTimer = setTimeout(persist, 700);
+});
+$('#q3').addEventListener('input', e => { CF.q = e.target.value; renderChecklist(); });
+$('#relock').addEventListener('click', () => { unlocked = false; try { sessionStorage.removeItem('hbn-unlocked'); } catch(e) {} $('#clist').innerHTML = ''; $('#t-fee').innerHTML=''; $('#t-mpay').innerHTML=''; renderLock(); });
+const PF = {m:'pending', q:''};
+const TICKET_OPTS = ['850 to be paid','850 paid','1000 to be paid','1000 paid','Resposible Full ticket','TBD'];
+const PAY_OPTS = ['Pending','Paid','N/A'];
+const isPend = v => /pending|to be paid/i.test(v||'');
+function payCell(m, k, opts){
+  const v = m[k] || '', o = opts.includes(v) ? opts : [v, ...opts];
+  return `<select class="psel ${isPend(v)?'pend-s':(/paid|ok/i.test(v)&&!/to be/i.test(v)?'ok-s':'')}" data-mid="${m.mid}" data-k="${k}" aria-label="${k} for ${esc(m.name)}">${o.map(x => `<option value="${esc(x)}" ${x===v?'selected':''}>${esc(x||'—')}</option>`).join('')}</select>`;
+}
+function renderPayments(){
+  const A = D.active, pendA = A.filter(a => fee(a)!=='Paid');
+  const M = [...D.m26.map(m=>({...m,yr:'2026'})), ...D.m25.filter(m=>m.status!=='Cancelled').map(m=>({...m,yr:'2025'}))];
+  const pc = k => M.filter(m => isPend(m[k])).length;
+  $('#paysum').innerHTML = [
+    ['Registration fee pending','active candidates',pendA.length],
+    ['Registration fee pending','matched',pc('fee')],
+    ['Flight contribution','to be paid',pc('ticket')],
+    ['Paid to HBN','pending',pc('paidHBN')],
+    ['Paid to Laís','pending',pc('paidLais')]].map(([t,s,n]) => `<div class="ps ${n?'hot':''}"><span>${t}</span><b>${n}</b><small>${s}</small></div>`).join('');
+  const q = PF.q.toLowerCase(), rows = pendA.filter(a => !q || a.name.toLowerCase().includes(q))
+    .sort((x,y) => (intro(y)==='ready') - (intro(x)==='ready') || x.name.localeCompare(y.name));
+  $('#t-fee').innerHTML = `<thead><tr><th>Candidate</th><th>Status</th><th>Group</th><th>Available from</th><th>Mobile</th><th></th></tr></thead><tbody>` + (rows.length ? rows.map(a => `<tr class="row">
+    <td><div class="who">${avatar(a)}<b class="pname">${esc(a.name)}</b></div></td>
+    <td>${intro(a)==='ready'?'<span class="chip c-good">Ready</span>':'<span class="chip c-mid">Not ready</span>'}</td>
+    <td><span class="chip c-mid">${esc(a.group)}</span></td>
+    <td>${a.start?fmtDate(a.start):'<span class="pend sm">Pending</span>'}</td><td>${a.phone?esc(a.phone):'<span class="pend sm">Pending</span>'}</td>
+    <td><button type="button" class="paybtn" data-payfee="${a.id}">Mark as paid</button></td></tr>`).join('') : '<tr><td colspan="6" class="empty">Every active candidate has paid the registration fee.</td></tr>') + '</tbody>';
+  const seg3 = $('#f-mpay');
+  seg3.innerHTML = [['pending','Only with something pending'],['all','All matches']].map(([v,t]) => `<button type="button" aria-pressed="${PF.m===v}" data-v="${v}">${t}</button>`).join('');
+  seg3.onclick = e => { const bt = e.target.closest('button'); if (bt) { PF.m = bt.dataset.v; renderPayments(); } };
+  const MR = M.filter(m => PF.m==='all' || ['fee','ticket','paidHBN','paidLais'].some(k => isPend(m[k])))
+    .sort((x,y) => (y.yr).localeCompare(x.yr) || String(y.match||'').localeCompare(String(x.match||'')));
+  $('#t-mpay').innerHTML = `<thead><tr><th>Au pair</th><th>Match</th><th>Type</th><th>Registration fee</th><th>Flight contribution</th><th>Paid to HBN</th><th>Paid to Laís</th></tr></thead><tbody>` +
+    (MR.length ? MR.map(m => `<tr class="row"><td><b class="pname">${esc(m.name)}</b><small class="yr">${m.yr}</small></td><td>${m.match?fmtDate(m.match):'—'}</td><td>${esc(m.type||'')}</td>
+      <td>${payCell(m,'fee',['Pending','ok'])}</td><td>${payCell(m,'ticket',TICKET_OPTS)}</td><td>${payCell(m,'paidHBN',PAY_OPTS)}</td><td>${payCell(m,'paidLais',PAY_OPTS)}</td></tr>`).join('')
+      : '<tr><td colspan="7" class="empty">No pending payments for matched candidates.</td></tr>') + '</tbody>';
+}
+$('#t-fee').addEventListener('click', e => { const bt = e.target.closest('[data-payfee]'); if (!bt) return; const id = bt.dataset.payfee;
+  if ('Paid' === DEFAULT[id].fee) delete over.fee[id]; else over.fee[id] = 'Paid'; renderAll(); persist(); });
+$('#t-mpay').addEventListener('change', e => { const s = e.target.closest('[data-mid]'); if (!s) return;
+  const mid = s.dataset.mid, k = s.dataset.k, key = mid.split('_')[0], o = ORIG_M[key].find(x => x.mid===mid), cur = {...(over.mpay[mid]||{})};
+  if (s.value === (o[k]||'')) delete cur[k]; else cur[k] = s.value;
+  if (Object.keys(cur).length) over.mpay[mid] = cur; else delete over.mpay[mid];
+  applyPay(); renderAll(); persist(); });
+$('#q4').addEventListener('input', e => { PF.q = e.target.value; renderPayments(); });
+$('#lc-nav').addEventListener('click', e => { const bt = e.target.closest('[data-lc]'); if (!bt) return;
+  document.querySelectorAll('#lc-nav button').forEach(x => x.setAttribute('aria-pressed', x===bt));
+  $('#lc-checklist').hidden = bt.dataset.lc!=='checklist'; $('#lc-payments').hidden = bt.dataset.lc!=='payments'; });
+function exportData(){
+  const out = JSON.parse(JSON.stringify(RAW));
+  out.data.active = D.active.map(a => ({...a, intro: intro(a), fee: fee(a)}));
+  out.data.m26 = D.m26.map(({mid, ...m}) => m); out.data.m25 = D.m25.map(({mid, ...m}) => m);
+  out.state = {checks: over.checks, cnotes: over.cnotes};
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(out)], {type:'application/json'}));
+  a.download = 'data.json'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+$('#export').addEventListener('click', exportData);
+function renderAll(){ renderReady(); renderOverview(); renderActive(); if (unlocked) { renderChecklist(); renderPayments(); } renderMatches(); renderDocs(); renderLock(); }
+renderAll(); renderEditor(); if (API_URL && !online) setSave('Could not reach the online copy. Showing the last version saved on this device.');
+})();
+</script>
+</body>
+</html>
